@@ -21,6 +21,18 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ── API key guard — fail fast with a clear message ─────────────────────────────
+from config import get_api_key
+_api_key = get_api_key()
+if not _api_key:
+    st.error(
+        "**ANTHROPIC_API_KEY is not set.**\n\n"
+        "On Streamlit Cloud: click **Manage app** (bottom-right) → **Settings** → **Secrets** and add:\n\n"
+        "```toml\nANTHROPIC_API_KEY = \"sk-ant-your-key-here\"\n```\n\n"
+        "Then click **Save** — the app will reboot automatically."
+    )
+    st.stop()
+
 # ── Agent registry keyed by routing agent output ───────────────────────────────
 AGENT_BUILDERS = {
     "hospital_flow": flow_mod.build,

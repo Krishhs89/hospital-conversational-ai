@@ -124,7 +124,7 @@ if "pending_example" in st.session_state:
 
 # Chat input
 user_input = st.chat_input("Ask about hospital operations…", key="chat_input")
-if "_ user_input" in st.session_state:
+if "_user_input" in st.session_state:
     user_input = st.session_state.pop("_user_input")
 
 if user_input:

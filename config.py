@@ -3,17 +3,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def _get_api_key() -> str:
+def get_api_key() -> str:
+    """Lazy loader — called at request time, not import time, so st.secrets is always ready."""
     # 1. Streamlit Cloud secrets (production)
     try:
         import streamlit as st
-        return st.secrets["ANTHROPIC_API_KEY"]
+        key = st.secrets.get("ANTHROPIC_API_KEY", "")
+        if key:
+            return key
     except Exception:
         pass
     # 2. Local .env / environment variable (development)
     return os.getenv("ANTHROPIC_API_KEY", "")
 
-ANTHROPIC_API_KEY = _get_api_key()
+# Kept for backward-compat; agents should prefer get_api_key() for lazy loading
+ANTHROPIC_API_KEY = get_api_key()
 ANTHROPIC_MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 SESSION_TOKEN_LIMIT = 20000

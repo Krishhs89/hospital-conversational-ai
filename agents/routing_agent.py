@@ -5,7 +5,7 @@ Applies guardrails to keep queries on-topic.
 """
 import json
 import anthropic
-from config import ANTHROPIC_MODEL, MAX_TOKENS, ANTHROPIC_API_KEY, AGENT_DESCRIPTIONS
+from config import ANTHROPIC_MODEL, MAX_TOKENS, get_api_key, AGENT_DESCRIPTIONS
 
 # Guardrail: domains this system handles
 ALLOWED_DOMAINS = set(AGENT_DESCRIPTIONS.keys())
@@ -61,7 +61,7 @@ Always call route_to_agent — do not answer the question yourself."""
 
 class RoutingAgent:
     def __init__(self) -> None:
-        self._client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+        self._client = anthropic.Anthropic(api_key=get_api_key())
 
     def route(self, query: str) -> dict:
         """
